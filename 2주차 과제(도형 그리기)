@@ -1,0 +1,33 @@
+from turtle import *
+
+shape('turtle')
+
+
+def polygon(n):
+    for i in range(n):
+       forward(200)
+       right(360/n)
+
+
+def polygon1(n, lenght):
+    for i in range(n):
+        forward(lenght)
+
+        right(360/n)
+
+
+
+for i in range(15):
+    polygon(3)
+    right(30)
+    speed(15)
+
+for i in range(17):
+    polygon1(5, 60)
+    right(i*45)
+    speed(15)
+
+for i in range(30):
+    polygon1(5, 13)
+    right(i*45)
+    speed(15)
