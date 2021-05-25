@@ -1,0 +1,179 @@
+#pragma warning (disable : 4996)
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+#define TRUE 1
+#define FALSE 0 
+
+typedef struct {	//단순 연결 리스트의 노드 구조 
+	char name[20];		// 이름
+	char phone[20];		// 전화번호
+	char email[30];		// 이메일
+	struct ListNode* link;	// 같은 구조의 다음 노드를 가리키는 포인터
+} ListNode;
+
+typedef struct {	// 리스트 시작을 나타내는 head 노드를 구조체로 정의
+	ListNode* head;		// **구조체형 포인터** head 선언
+} LinkedList_h;
+
+LinkedList_h* createLinkedList_h(void) {	// 공백 연결리스트를 생성하는 연산 //(교재 160p 1번 그림)
+	LinkedList_h* L;
+	L = (LinkedList_h*)malloc(sizeof(LinkedList_h));	// 시작 노드의 메모리 크기 할당
+	L->head = NULL;	  // 공백 리스트이므로 NULL로 설정
+	return L;
+}
+
+void insertLastNode(LinkedList_h* L, char *x, char *y, char *z) {	//  마지막 노드로 삽입하는 연산
+	ListNode* newNode;	// 새로운 노드를 참조하는 포인터 생성
+	ListNode* temp;		// 포인터 temp 생성
+
+	newNode = (ListNode*)malloc(sizeof(ListNode));	// 새로 생성한 노드의 크기 할당
+
+	strcpy(newNode->name, x);	// main함수에서 입력한 문자열들을 새로 생성한 노드의 데이터 값으로 지정
+	strcpy(newNode->phone, y);	//
+	strcpy(newNode->email, z);	//
+	newNode->link = NULL;
+
+	if (L->head == NULL) {	// 현재 리스트가 공백인 경우
+		L->head = newNode;	// 새 노드를 시작 노드로 연결
+		return;
+	}
+
+	temp = L->head;		// temp에 시작 노드의 주소를 연결
+	while (temp->link != NULL)		// temp의 위치가 마지막 노드에 도달할 때까지 반복
+		temp = temp->link;		// temp의 위치를 뒤로 한 칸씩 이동
+	
+	temp->link = newNode;	// 마지막 노드 뒤에 새 노드를 연결
+}
+		
+ListNode* searchNode(LinkedList_h* L, char* x) {	// main함수에서 입력한 이름이 있는 노드를 탐색해서 그 노드의 주소를 반환하는 함수
+	ListNode* temp;		// 포인터 temp 생성
+	temp = L->head;		// 포인터 temp를 시작 노드에 연결
+	while (temp != NULL) {		// temp의 위치가 마지막노드에 도달할때까지 반복
+		if (strcmp(temp->name, x) == 0)		// 입력한 이름이 있는 노드에 도달하였다면,
+			return temp;		// 그 노드의 주소값을 반환
+		else
+			temp = temp->link;	 // 아니면 다음 노드로 이동 (뒤의 노드의 주소값을 참조)
+	}
+}
+
+int  deleteNode(LinkedList_h* L, ListNode* p) {		// 리스트에서 노드 p를 삭제하는 연산
+	ListNode* pre;		  // 포인터 pre 생성
+	if (L->head == NULL) 	// 공백 리스트라면 함수 종료
+		return FALSE;
+	if (L->head->link == NULL) {	// 만약 삭제하려는 노드가 시작노드라면
+		L->head = NULL;		// 리스트 시작 포인터를 NULL로 설정
+		return TRUE;
+	}
+	else if (p == NULL)	// 삭제할 노드가 없다면 삭제 연산 중단
+		return FALSE;
+	else {		// 리스트의 노드가 2개 이상이라면,
+		pre = L->head;			// 포인터 pre를 시작 노드에 연결 
+		if (pre->name == p) {		// 만약 삭제할 노드가 시작노드라면,
+			pre = NULL;				 // 포인터 pre를 초기화 하고, 
+			L->head = p->link;		 // head에 두번째 노드의 주소값 대입
+		}
+		else {		// 리스트의 노드가 2개 이상이고 삭제할 노드가 시작노드가 아니라면,
+			while (pre->link != p) {	// 포인터 pre가 삭제할 노드 바로 전에 도달할때까지 반복
+				pre = pre->link;		  // 포인터 pre를 현재 연결하고있는 노드의 다음 노드에 연결
+			}
+			pre->link = p->link;	// 삭제할 노드 바로 전 노드의 링크 필드값에 삭제할 노드 바로 뒤의 주소값 저장
+		}
+		free(p);		// 삭제할 노드 메모리공간 제거
+		return TRUE;
+	}
+}
+
+void printList(LinkedList_h* L) {	 // 주소록에 등록된 명단 출력하는 함수 
+	ListNode* p;		
+	p = L->head;
+	printf("-----주소록에 등록된 명단-----\n");
+	while (p != NULL) {		
+		printf("%s %s %s\n", p->name, p->phone, p->email);	
+		p = p->link;
+		if (p != NULL)
+			printf("\n");
+	}
+	printf("\n");
+}
+
+void freeLinkedList_h(LinkedList_h* L) {	 // 연결 리스트의 전체 메모리를 해제하는 연산 
+	ListNode* p;
+	while (L->head != NULL) {
+		p = L->head;
+		L->head = L->head->link;
+		free(p);
+		p = NULL;
+	}
+}
+
+void print_menue() {							// 메뉴를 출력하는 함수
+	printf("-----메뉴를 선택하세요!----*\n");
+	printf("1. 주소록 추가\n");
+	printf("2. 주소록 삭제\n");
+	printf("3. 주소록 목록 출력\n");
+	printf("4. 프로그램 종료\n");
+	printf("---------------------------*\n");
+}
+
+int main() {
+	LinkedList_h* L;
+	ListNode* p;
+	int menu = TRUE, select;
+	int num;
+	char x[20], y[20], z[30], searchx[20];
+
+	L = createLinkedList_h();	// 공백 리스트 생성하기
+
+	while (menu) {
+		print_menue();			// 메뉴 출력
+		scanf("%d", &select);		// 메뉴 번호 선택
+		getchar();
+
+		switch (select) {		// 선택한 번호가 변수인 switch문
+		case 1:	  // 주소록에 추가
+			printf("\n주소록에 추가할 정보를 입력\n");
+			printf("이름: ");
+			scanf("%s", x);
+			getchar();
+			printf("전화번호: ");
+			scanf("%s", y);
+			getchar();
+			printf("이메일: ");
+			scanf("%s", z);
+			
+			insertLastNode(L, x, y, z);
+			printf("주소록에 %s 이 추가되었습니다!\n", x);
+			break;
+
+		case 2:	   // 주소록에서 삭제
+			printf("삭제할 주소의 이름을 입력하세요: ");
+			scanf("%s", searchx);
+			getchar();
+			p = searchNode(L, searchx);
+
+			num = deleteNode(L, p);
+			if (num == 1)
+				printf("%s 의 주소가 삭제되었습니다.\n", searchx);
+			else
+				printf("%s 의 주소가 등록되지 않았습니다.\n", searchx);
+			break;
+
+		case 3:    // 주소록에 등록된 명단 출력
+			printList(L);
+			break;
+
+		case 4:	   // 프로그램 종료
+			menu = FALSE;
+			printf("다음에도 이용해주세요!\n");
+			break;
+
+		default:  
+			printf("1~4번 중 하나를 입력해주세요.\n");
+		}
+	}
+
+	freeLinkedList_h(L);		// 연결리스트의 전체 메모리를 해제하는 함수 호출
+	return 0;
+}
