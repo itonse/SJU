@@ -17,14 +17,14 @@ typedef struct {	// 리스트 시작을 나타내는 head 노드를 구조체로
 	ListNode* head;		// **구조체형 포인터** head 선언
 } LinkedList_h;
 
-LinkedList_h* createLinkedList_h(void) {	// 공백 연결리스트를 생성하는 연산 //(교재 160p 1번 그림)
+LinkedList_h* createLinkedList_h(void) {	// 공백 연결리스트를 생성하는 연산
 	LinkedList_h* L;
 	L = (LinkedList_h*)malloc(sizeof(LinkedList_h));	// 시작 노드의 메모리 크기 할당
 	L->head = NULL;	  // 공백 리스트이므로 NULL로 설정
 	return L;
 }
 
-void insertLastNode(LinkedList_h* L, char *x, char *y, char *z) {	 //  마지막 노드로 삽입하는 연산
+void insertLastNode(LinkedList_h* L, char* x, char* y, char* z) {	 //  마지막 노드로 삽입하는 연산
 	ListNode* newNode;	// 새로운 노드를 참조하는 포인터 생성
 	ListNode* temp;		// 포인터 temp 생성
 
@@ -43,10 +43,10 @@ void insertLastNode(LinkedList_h* L, char *x, char *y, char *z) {	 //  마지막
 	temp = L->head;		// temp에 시작 노드의 주소를 연결
 	while (temp->link != NULL)		// temp의 위치가 마지막 노드에 도달할 때까지 반복
 		temp = temp->link;		// temp의 위치를 뒤로 한 칸씩 이동
-	
+
 	temp->link = newNode;	// 마지막 노드 뒤에 새 노드를 연결
 }
-		
+
 ListNode* searchNode(LinkedList_h* L, char* x) {	// main함수에서 입력한 이름이 있는 노드를 탐색해서 그 노드의 주소를 반환하는 함수
 	ListNode* temp;		// 포인터 temp 생성
 	temp = L->head;		// 포인터 temp를 시작 노드에 연결
@@ -86,11 +86,11 @@ int  deleteNode(LinkedList_h* L, ListNode* p) {		// 리스트에서 노드 p를 
 }
 
 void printList(LinkedList_h* L) {	 // 주소록에 등록된 명단 출력하는 함수 
-	ListNode* p;		
+	ListNode* p;
 	p = L->head;
 	printf("-----주소록에 등록된 명단-----\n");
-	while (p != NULL) {		
-		printf("%s %s %s\n", p->name, p->phone, p->email);	
+	while (p != NULL) {
+		printf("%s %s %s\n", p->name, p->phone, p->email);
 		p = p->link;
 		if (p != NULL)
 			printf("\n");
@@ -115,6 +115,7 @@ void print_menue() {							// 메뉴를 출력하는 함수
 	printf("3. 주소록 목록 출력\n");
 	printf("4. 프로그램 종료\n");
 	printf("---------------------------*\n");
+	printf("번호 입력: ");
 }
 
 int main() {
@@ -130,10 +131,11 @@ int main() {
 		print_menue();			// 메뉴 출력
 		scanf("%d", &select);		// 메뉴 번호 선택
 		getchar();
+		printf("\n");
 
 		switch (select) {		// 선택한 번호가 변수인 switch문
 		case 1:	  // 주소록에 추가
-			printf("\n주소록에 추가할 정보를 입력\n");
+			printf("**주소록에 추가할 정보 입력**\n");
 			printf("이름: ");
 			scanf("%s", x);
 			getchar();
@@ -142,9 +144,9 @@ int main() {
 			getchar();
 			printf("이메일: ");
 			scanf("%s", z);
-			
+
 			insertLastNode(L, x, y, z);
-			printf("주소록에 %s 이 추가되었습니다!\n", x);
+			printf("\n주소록에 %s 이 추가되었습니다!\n", x);
 			break;
 
 		case 2:	   // 주소록에서 삭제
@@ -169,7 +171,7 @@ int main() {
 			printf("다음에도 이용해주세요!\n");
 			break;
 
-		default:  
+		default:
 			printf("1~4번 중 하나를 입력해주세요.\n");
 		}
 	}
