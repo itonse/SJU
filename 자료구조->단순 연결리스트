@@ -24,7 +24,7 @@ LinkedList_h* createLinkedList_h(void) {	// 공백 연결리스트를 생성하�
 	return L;
 }
 
-void insertLastNode(LinkedList_h* L, char *x, char *y, char *z) {	//  마지막 노드로 삽입하는 연산
+void insertLastNode(LinkedList_h* L, char *x, char *y, char *z) {	 //  마지막 노드로 삽입하는 연산
 	ListNode* newNode;	// 새로운 노드를 참조하는 포인터 생성
 	ListNode* temp;		// 포인터 temp 생성
 
